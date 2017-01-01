@@ -1,0 +1,74 @@
+/*************************************************************
+** Author: SZY
+** Time: 06-01-2016
+** Description:
+*************************************************************/
+
+
+
+
+/************************************************************************/
+/* This is head is used to define some parameters of the eblaze board   */
+/************************************************************************/
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <signal.h>
+#include <errno.h>
+#include <string.h>
+
+
+
+
+typedef unsigned long long u64;
+typedef unsigned int u32;
+typedef unsigned short u16;
+
+#define FREQUENCY 3300000000
+
+#define Eblaze_Channel 12			//The number of channels
+#define Channel_Lun 16				//The number of luns in each channel
+#define Lun_Block 20				//The number of blocks in each lun
+#define Page_Block 512				//The number of pages in each block
+#define Page_Size 16 * 1024			//16KB
+
+#define	USE_TFD_INTERFACE ture
+#define	RW_INFO_PAGE_IN_BLOCK 2048		//Every Block have 2048 RW_INFO pages
+#define	RW_INFO_PAGE_SIZE 4096			//In RW_INFO, the page size is 4KB
+
+
+/************************************************************************/
+/* Return the size of the disk Eblaze in bytes                 */
+/************************************************************************/
+u64 myEblaze_size(int fd);
+
+/************************************************************************/
+/* Write a slab into the block correspond to  the sid                 */
+/************************************************************************/
+int myEblaze_write_slab(int fd, const void *buffer, int sid);
+
+/************************************************************************/
+/* Read a block to the buffer corresponded to  the sid                 */
+/************************************************************************/
+int myEblaze_read_slab(int fd, void *buffer, int sid);
+
+/************************************************************************/
+/* Read a block page to the buffer corresponded to  the sid            */
+/************************************************************************/
+int myEblaze_read_page(int fd, void *buffer, int sid, u64 offset);
+
+/************************************************************************/
+/* Read several block pages to the buffer corresponded to  the sid            */
+/************************************************************************/
+int myEblaze_read_pages(int fd, void *buffer, int sid, u64 offset, int num);
+
+
+int myEblaze_write_page(int fd, const void *buffer, int sid, int offset);
+
+
+/************************************************************************/
+/* Erase the correspond block indicated by sid          */
+/************************************************************************/
+int myEblaze_erase_slab(int fd, int sid);
